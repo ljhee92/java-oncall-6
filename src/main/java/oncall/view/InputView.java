@@ -33,8 +33,15 @@ public class InputView implements InputReader, OutputWriter {
         }
     }
 
-    public List<String> requestWeekDaysEmployee() {
+    public List<String> requestWeekDayEmployees() {
         displayMessage("평일 비상 근무 순번대로 사원 닉네임을 입력하세요> ");
+        String input = inputMessage();
+        validateEmployee(input);
+        return Parser.parseToList(input);
+    }
+
+    public List<String> requestHolidayEmployees() {
+        displayMessage("휴일 비상 근무 순번대로 사원 닉네임을 입력하세요> ");
         String input = inputMessage();
         validateEmployee(input);
         return Parser.parseToList(input);
