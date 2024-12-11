@@ -1,5 +1,6 @@
 package oncall.domain;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Scheduler {
@@ -8,7 +9,7 @@ public class Scheduler {
     private final Employees holidayEmployees;
 
     int holidayIndex = 0;
-    int weekdayIndex = 1;
+    int weekdayIndex = 0;
 
     private Scheduler(Schedule schedule, List<Employees> employees) {
         this.schedule = schedule;
@@ -34,7 +35,13 @@ public class Scheduler {
 
     public String getDayOfWeek(int day) {
         DayOfWeek currentDayOfWeek = getCurrentDayOfWeek(day);
-        return currentDayOfWeek.getName();
+        String dayOfWeek = currentDayOfWeek.getName();
+        if (!currentDayOfWeek.isWeekend() && Arrays.stream(Holidays.values()).anyMatch(holidays -> {
+            return holidays.isHoliday(schedule.getMonth().getMonth(), day);
+        })) {
+            dayOfWeek = dayOfWeek + "(휴일)";
+        }
+        return dayOfWeek;
     }
 
     public String getAssignedEmployees(int day) {
@@ -42,18 +49,18 @@ public class Scheduler {
         int index = day - 1;
 
         DayOfWeek currentDayOfWeek = getCurrentDayOfWeek(day);
-        if (currentDayOfWeek.isHoliday()) {
+        if (currentDayOfWeek.isWeekend()) {
             name = holidayEmployees.getEmployees().get(index - (5 * holidayIndex)).getName();
-            if (day % 7 == 2) {
+            if (index % 7 == 1) {
                 holidayIndex++;
             }
         }
 
-        if (!currentDayOfWeek.isHoliday()) {
-            name = weekdayEmployees.getEmployees().get(index - (2 * weekdayIndex)).getName();
-            if (day % 7 == 0) {
+        if (!currentDayOfWeek.isWeekend()) {
+            if (index % 7 == 2) {
                 weekdayIndex++;
             }
+            name = weekdayEmployees.getEmployees().get(index - (2 * weekdayIndex)).getName();
         }
         return name;
     }

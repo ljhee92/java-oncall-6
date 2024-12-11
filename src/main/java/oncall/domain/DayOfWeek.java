@@ -13,11 +13,11 @@ public enum DayOfWeek {
     ;
 
     private final String name;
-    private final boolean isHoliday;
+    private final boolean isWeekend;
 
-    DayOfWeek(String name, boolean isHoliday) {
+    DayOfWeek(String name, boolean isWeekend) {
         this.name = name;
-        this.isHoliday = isHoliday;
+        this.isWeekend = isWeekend;
     }
 
     public static DayOfWeek of(String name) {
@@ -33,7 +33,7 @@ public enum DayOfWeek {
         return name;
     }
 
-    public boolean isHoliday() {
-        return isHoliday;
+    public boolean isWeekend() {
+        return isWeekend;
     }
 }
