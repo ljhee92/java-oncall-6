@@ -5,6 +5,7 @@ import oncall.domain.Employees;
 import oncall.domain.HolidayEmployees;
 import oncall.domain.Month;
 import oncall.domain.Schedule;
+import oncall.domain.Scheduler;
 import oncall.domain.WeekdayEmployees;
 import oncall.util.Parser;
 import oncall.util.RetryHandler;
@@ -24,7 +25,9 @@ public class OnCallController {
 
     public void run() {
         Schedule schedule = RetryHandler.repeat(this::getSchedule);
-        RetryHandler.repeat(this::getEmployees);
+        List<Employees> employees = RetryHandler.repeat(this::getEmployees);
+        Scheduler scheduler = Scheduler.create(schedule, employees);
+        outputView.displayResult(scheduler);
     }
 
     private Schedule getSchedule() {
@@ -32,8 +35,9 @@ public class OnCallController {
         return Schedule.of(Month.of(Parser.parseToInt(input.get(0))), DayOfWeek.of(input.get(1)));
     }
 
-    private void getEmployees() {
+    private List<Employees> getEmployees() {
         Employees weekdaysEmployees = WeekdayEmployees.of(inputView.requestWeekDayEmployees());
         Employees holidayEmployees = HolidayEmployees.of(inputView.requestHolidayEmployees(), weekdaysEmployees);
+        return List.of(weekdaysEmployees, holidayEmployees);
     }
 }

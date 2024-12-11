@@ -33,4 +33,12 @@ public enum Month {
         }
         throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT_EXCEPTION.getMessage());
     }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getLastDay() {
+        return lastDay;
+    }
 }

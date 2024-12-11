@@ -13,6 +13,14 @@ public class Schedule {
         return new Schedule(month, dayOfWeek);
     }
 
+    public Month getMonth() {
+        return month;
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
     @Override
     public String toString() {
         return "Schedule{" +
