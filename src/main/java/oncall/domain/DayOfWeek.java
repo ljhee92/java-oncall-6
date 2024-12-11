@@ -28,4 +28,12 @@ public enum DayOfWeek {
         }
         throw new IllegalArgumentException(ErrorMessage.INVALID_INPUT_EXCEPTION.getMessage());
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isHoliday() {
+        return isHoliday;
+    }
 }
